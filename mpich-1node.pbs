@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#PBS -N gpudirect_mpich_test
+#PBS -P jh2
+#PBS -q gpuvolta
+#PBS -l ncpus=48
+#PBS -l ngpus=4
+#PBS -l mem=382GB
+#PBS -m aeb
+#PBS -M ben.wibking@anu.edu.au
+#PBS -l wd
+#PBS -l walltime=0:15:00
+#PBS -l storage=scratch/jh2+gdata/jh2
+#PBS -l jobfs=400GB
+
+# --- initialize test ---
+export PATH=$HOME/mpich3.4.2/bin:$PATH
+export MPICH_RDMA_ENABLED_CUDA=1
+export MPICH_GPU_SUPPORT_ENABLED=1
+
+MPI_OPTIONS="-np $PBS_NGPUS -gpus-per-proc=1"
+echo "Using MPI_OPTIONS = $MPI_OPTIONS"
+
+mpiexec $MPI_OPTIONS ./bin/direct_mpich > mpich_1node.log
+
+
+
+
+
+

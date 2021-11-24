@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#PBS -N gpudirect_test_1node
+#PBS -N gpudirect_ompi_test
 #PBS -P jh2
 #PBS -q gpuvolta
 #PBS -l ncpus=48
@@ -17,7 +17,7 @@
 MPI_OPTIONS="-np $PBS_NGPUS --map-by numa:SPAN --bind-to numa --mca pml ucx -x UCX_TLS=rc,sm,cuda"
 echo "Using MPI_OPTIONS = $MPI_OPTIONS"
 
-mpirun $MPI_OPTIONS ./gpu_wrapper.sh > gpudirect_1node.log
+mpirun $MPI_OPTIONS ./ompi_gpu_wrapper.sh > ompi_1node.log
 
 
 

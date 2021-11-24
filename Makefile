@@ -1,19 +1,18 @@
-all: direct_c
+all:
 
 .PHONY:	setFlags clean
 
 setFlags:
 CFLAGS = -lcudart
 
-direct_c: direct.cpp
+ompi: direct_ompi.cpp
 	mkdir -p bin
-	mpicxx $(CFLAGS) -o bin/direct_c direct.cpp
+	mpicxx $(CFLAGS) -o bin/direct_ompi direct_ompi.cpp
 
-direct_acc_c: direct_acc.c
+mpich: direct_mpich.cpp
 	mkdir -p bin
-	pgcc $(CFLAGS) -o bin/direct_acc_c direct_acc.c
+	mpicxx $(CFLAGS) -o bin/direct_mpich direct_mpich.cpp
 
 clean:
 	rm -f *.o
-	rm -f *.mod
 	rm -rf bin
