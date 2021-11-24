@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <cuda_runtime.h>
 #include <mpi.h>
- 
+
+#include "mpi-ext.h" /* Needed for OpenMPI CUDA-aware check */
+
 int main( int argc, char** argv )
 {
     MPI_Init (&argc, &argv);
@@ -15,13 +17,23 @@ int main( int argc, char** argv )
     size_t bytes;
     int i;
  
-    // Ensure that RDMA ENABLED CUDA is set correctly
+#if 0
+    // MPICH: Ensure that RDMA ENABLED CUDA is set correctly
     direct = getenv("MPICH_RDMA_ENABLED_CUDA")==NULL?0:atoi(getenv ("MPICH_RDMA_ENABLED_CUDA"));
     if(direct != 1){
         printf ("MPICH_RDMA_ENABLED_CUDA not enabled!\n");
         exit (EXIT_FAILURE);
     }
- 
+#endif
+
+    // OpenMPI: Ensure that CUDA-aware support is enabled
+    if (1 == MPIX_Query_cuda_support()) {
+        printf("This MPI library has CUDA-aware support.\n");
+    } else {
+        printf("This MPI library does not have CUDA-aware support.\n");
+	exit (EXIT_FAILURE);
+    }
+    
     // Get MPI rank and size
     MPI_Comm_rank (MPI_COMM_WORLD, &rank);
     MPI_Comm_size (MPI_COMM_WORLD, &size);
